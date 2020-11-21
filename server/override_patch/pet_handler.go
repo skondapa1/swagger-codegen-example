@@ -1,4 +1,4 @@
-package main
+package swagger
 
 import (
     "net/http"
@@ -8,12 +8,10 @@ import (
     "io/ioutil"
     "strconv"
     "strings"
-     swagger "petserver/go"
-     db "server/controller"
 )
 
 func AddMyPet(w http.ResponseWriter, r *http.Request) {
-    var pet swagger.Pet
+    var pet Pet
     // _ = json.NewDecoder(r.Body).Decode(pet)
     // fmt.Println("AddMyPet", r.Body)
     // fmt.Println("AddMyPet", pet)
@@ -27,7 +25,7 @@ func AddMyPet(w http.ResponseWriter, r *http.Request) {
     json.Unmarshal([]byte(body), &pet)
     fmt.Println("_AddMyPet", pet)
 
-    err = db.InsertPet(pet)
+    err = InsertPet(pet)
     if err != nil {
        http.Error(w, "Db Insert failed !!", http.StatusBadRequest)
        return
@@ -38,7 +36,7 @@ func AddMyPet(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteMyPet(w http.ResponseWriter, r *http.Request) {
-    var pet swagger.Pet
+    var pet Pet
     body, err := ioutil.ReadAll(r.Body)
     if err != nil {
        log.Printf("Error reading body: %v", err)
@@ -47,7 +45,7 @@ func DeleteMyPet(w http.ResponseWriter, r *http.Request) {
     }
     json.Unmarshal([]byte(body), &pet)
 
-    idx := db.DeletePetById(pet.Id)
+    idx := DeletePetById(pet.Id)
 
     if (idx < 0) {
 	    w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -72,7 +70,7 @@ func GetMyPetById(w http.ResponseWriter, r *http.Request) {
     petId, _ :=  strconv.ParseInt(id,  10, 64)
     log.Printf("GetMyPetById  %v", petId)
 
-    pet := db.FindPetById(petId)
+    pet := FindPetById(petId)
 
     if (pet == nil) {
 	    //w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -100,7 +98,7 @@ func FindMyPetsByTags(w http.ResponseWriter, r *http.Request) {
 
     log.Printf("GetMyPetByTag  %v", filters)
 
-    pets, _ := db.FindPetsByTag(filters)
+    pets, _ := FindPetsByTag(filters)
     if (pets == nil) {
 	    //w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	    w.WriteHeader(http.StatusNotFound)

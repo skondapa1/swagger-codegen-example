@@ -76,4 +76,8 @@ func DbClose() {
     client.Disconnect(ctx)
 }
 
+func CollectionPets() *mongo.Collection {
+    return db.Collection("pets")
+}
+
 

@@ -11,8 +11,9 @@ import (
 	//
 	//    sw "github.com/myname/myrepo/go"
 	//
+    dbapi "petserver/go/controller"
 	sw "petserver/go"
-    dbapi "server/controller"
+
 )
 
 func main() {

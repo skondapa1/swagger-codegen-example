@@ -1,16 +1,16 @@
-package controller
+package swagger
 
 import (
    "reflect"
    "context"
    "fmt"
    "log"
-   swagger "petserver/go"
    "go.mongodb.org/mongo-driver/bson"
    "go.mongodb.org/mongo-driver/mongo/options"
+   db "petserver/go/controller"
 )
 
-var  pets  []swagger.Pet
+var  pets  []Pet
 
 func Find_ (slice interface{}, f func(value interface{}) bool) int {
     s := reflect.ValueOf(slice)
@@ -29,14 +29,14 @@ func Find_ (slice interface{}, f func(value interface{}) bool) int {
  *
  * Insert a new pet object.
  */
-func InsertPet_ (pet swagger.Pet) error {
+func InsertPet_ (pet Pet) error {
     pets = append(pets, pet)
     return nil
 }
 
-func FindPetById_ (petId int64)  *swagger.Pet {
+func FindPetById_ (petId int64)  *Pet {
     idx :=  Find_(pets, func(value interface{}) bool {
-       return value.(swagger.Pet).Id == petId
+       return value.(Pet).Id == petId
     })
 
     if (idx < 0) {
@@ -55,7 +55,7 @@ func FindPetById_ (petId int64)  *swagger.Pet {
 func DeletePetById_ (petId int64) int {
 
     idx :=  Find_(pets, func(value interface{}) bool {
-       return value.(swagger.Pet).Id ==  petId
+       return value.(Pet).Id ==  petId
     })
 
     if (idx >= 0) {
@@ -67,8 +67,8 @@ func DeletePetById_ (petId int64) int {
     return idx
 }
 
-func InsertPet (pet swagger.Pet) error {
-    collection := db.Collection("pets")
+func InsertPet (pet Pet) error {
+    collection := db.CollectionPets()
 
     insertResult, err := 
           collection.InsertOne(context.TODO(), pet)
@@ -82,10 +82,10 @@ func InsertPet (pet swagger.Pet) error {
     return nil
 }
 
-func FindPetById (petId int64) *swagger.Pet {
-    var pet swagger.Pet
+func FindPetById (petId int64) *Pet {
+    var pet Pet
 
-    collection := db.Collection("pets")
+    collection := db.CollectionPets()
     filter := bson.M { "id" : petId}
 
     err := collection.FindOne(context.TODO(), filter).Decode(&pet)
@@ -99,7 +99,7 @@ func FindPetById (petId int64) *swagger.Pet {
 }
 
 func DeletePetById (petId int64) int {
-    collection := db.Collection("pets")
+    collection := db.CollectionPets()
     filter := bson.M { "id" : petId}
 
     result, err := 
@@ -123,12 +123,12 @@ func DeletePetById (petId int64) int {
    }
 */
 
-func FindPetsByTag (tags []string) ([]swagger.Pet, error) {
+func FindPetsByTag (tags []string) ([]Pet, error) {
 
-    collection := db.Collection("pets")
+    collection := db.CollectionPets()
 
     //tagsSlice := []bson.M{}
-    var pets []swagger.Pet
+    var pets []Pet
     for _, e  := range tags {
         //tagsSlice = append(tagsSlice, 
               //bson.M{"$elemMatch": bson.M{"name": e}})
@@ -172,7 +172,7 @@ func FindPetsByTag (tags []string) ([]swagger.Pet, error) {
         //Iterate through the cursor allows us to decode documents one at a time
         for cur.Next(context.TODO()) {
             //Create a value into which the single document can be decoded
-            var elem swagger.Pet
+            var elem Pet
             err := cur.Decode(&elem)
             if err != nil {
                 log.Printf("%v\n", err)
