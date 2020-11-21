@@ -12,11 +12,12 @@
    <br> https://www.digitalocean.com/community/tutorials/how-to-use-go-with-mongodb-using-the-mongodb-go-driver
  
 
-<b> -installing swagger-codegen </b>
+<b> installing swagger-codegen </b>
 <br> brew install swagger-codegen
 
-<b> -installing mongodb on ubuntu and starting </b>   
+<b> installing mongodb on ubuntu and starting </b>   
 <br> https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
 
-<br> run make to build a client/server
+<b>  build client/server </b>
+<br> make
  
