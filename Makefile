@@ -1,43 +1,43 @@
 #GOARCH=386
+#prefix=$(shell bash -c pwd)
+#export GOPATH=${prefix}
 GOARCH=amd64
 GOCMD=go
 GOBUILD=GOARCH=${GOARCH} $(GOCMD) build
 GOINSTALL=GOARCH=${GOARCH} $(GOCMD) install
 
 
-all:
-	swagger-codegen generate -i https://petstore.swagger.io/v2/swagger.json -l go-server  -o petserver
-	swagger-codegen generate -i https://petstore.swagger.io/v2/swagger.json -l go  -o petstore
-	cp ./server/override_patch/routers.go ./petserver/go/
-	cp ./server/override_patch/pet_handler.go ./petserver/go/
-	cp ./server/override_patch/pets_collection.go ./petserver/go/ 
-	cp -r ./server/override_patch/controller ./petserver/go
-	go get -d -v client/...
-	go get -d -v server
-	$(GOINSTALL) server
-	$(GOINSTALL) client/... 
+#generate model objects from spec file
+#generate server source without the model
+#generate client source
+
+generate: 
+	swagger-codegen generate -i https://petstore.swagger.io/v2/swagger.json -l go  -o petstore -c config_client.json
+	swagger-codegen generate -i https://petstore.swagger.io/v2/swagger.json -l go-server -o pets -t ./resources/ -Dmodels -c config.json 
+	swagger-codegen generate -i https://petstore.swagger.io/v2/swagger.json -l go-server  -o petstore_server -t ./resources/ --import-mappings Pet=swagger-codegen-example/pets,Order=swagger-codegen-example/pets,Body1=swagger-codegen-example/pets,ApiResponse=swagger-codegen-example/pets,Category=swagger-codegen-example/pets,Body=swagger-codegen-example/pets,Order=swagger-codegen-example/pets,Tag=swagger-codegen-example/pets,User=swagger-codegen-example/pets -c config_server.json
+
+deps:
+	go get -d -v swagger-codegen-example/...
 
 build: deps
-	$(GOBUILD) server 
-	$(GOBUILD) client/... 
+	$(GOINSTALL) swagger-codegen-example/petstore_server/...
+	$(GOINSTALL) swagger-codegen-example/client/... 
+
+all: build
 
 clean:
-	go clean -i server
-	go clean -i client/...
+	-rm -rf petstore_server
+	-rm -rf petstore
+	-rm -rf pets
+	-go clean -i swagger-codegen-example/client/...
+	-go clean -i swagger-codegen-example/server/...
+	-rm -f $(GOPATH)/bin/client
+	-rm -f $(GOPATH)/bin/petstore_server
 
-deps: 
-	go get -d -v client/...
-	go get -d -v server
 
 .DEFAULT_GOAL := all 
 
-.PHONY: \
-	all \
-	build \
-	clean \
-	deps  \
-	codegen-server  \
-	codegen-client 
+.PHONY:  all build clean  deps  
 
 
 

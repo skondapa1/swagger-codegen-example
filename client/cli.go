@@ -1,7 +1,7 @@
 package main
 
 //import "golang.org/x/oauth2"
-import "petstore"
+import "swagger-codegen-example/petstore"
 import "fmt"
 import "golang.org/x/net/context"
 
@@ -9,25 +9,25 @@ import "golang.org/x/net/context"
 
 func  main() {
 
-    cfg := &swagger.Configuration{
+    cfg := &petstore.Configuration{
 		BasePath:      "http://localhost:8080/v2",
 		DefaultHeader: make(map[string]string),
 		UserAgent:     "Swagger-Codegen/1.0.0/go",
 	}
 
-    category := &swagger.Category {
+    category := &petstore.Category {
       1,
       "Dog",
     }
 
-    tags := []swagger.Tag {
-       swagger.Tag{1, "lab"},
-       swagger.Tag{2, "labradoodle"}, 
-       swagger.Tag{3, "GermanSheperd"},
-       swagger.Tag{4, "AustralianDoberman"},
+    tags := []petstore.Tag {
+       petstore.Tag{1, "lab"},
+       petstore.Tag{2, "labradoodle"}, 
+       petstore.Tag{3, "GermanSheperd"},
+       petstore.Tag{4, "AustralianDoberman"},
      }
 
-    rascal := swagger.Pet {
+    rascal := petstore.Pet {
       1234,
       category,
       "rascal",
@@ -36,7 +36,7 @@ func  main() {
       "7 yr old dog",
     }
 
-    coffee := swagger.Pet {
+    coffee := petstore.Pet {
       1235,
       category,
       "coffee",
@@ -45,7 +45,7 @@ func  main() {
       "7 yr old dog",
     }
 
-    client :=  swagger.NewAPIClient(cfg)
+    client :=  petstore.NewAPIClient(cfg)
 
     add_r, add_err := client.PetApi.AddPet(context.Background(), rascal) 
     if add_err != nil {

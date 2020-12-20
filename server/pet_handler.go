@@ -1,4 +1,4 @@
-package swagger
+package server
 
 import (
     "net/http"
@@ -8,10 +8,13 @@ import (
     "io/ioutil"
     "strconv"
     "strings"
+    pets "swagger-codegen-example/pets/go"
 )
 
+var InnerHandlerMap  = map[string]http.HandlerFunc{}
+
 func AddMyPet(w http.ResponseWriter, r *http.Request) {
-    var pet Pet
+    var pet pets.Pet
     // _ = json.NewDecoder(r.Body).Decode(pet)
     // fmt.Println("AddMyPet", r.Body)
     // fmt.Println("AddMyPet", pet)
@@ -36,7 +39,7 @@ func AddMyPet(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteMyPet(w http.ResponseWriter, r *http.Request) {
-    var pet Pet
+    var pet pets.Pet
     body, err := ioutil.ReadAll(r.Body)
     if err != nil {
        log.Printf("Error reading body: %v", err)

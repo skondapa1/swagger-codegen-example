@@ -1,3 +1,4 @@
+{{>partial_header}}
 package main
 
 import (
@@ -9,21 +10,15 @@ import (
 	// once you place this file into your project.
 	// For example,
 	//
-	//    sw "github.com/myname/myrepo/go"
+	//    sw "github.com/myname/myrepo/{{apiPath}}"
 	//
-    dbapi "petserver/go/controller"
-	sw "petserver/go"
-
+	sw "./{{apiPath}}"
 )
 
 func main() {
-
-
-    defer dbapi.DbClose()
-    dbapi.DbInit()
-
 	log.Printf("Server started")
+
 	router := sw.NewRouter()
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(":{{serverPort}}", router))
 }

@@ -49,7 +49,7 @@ func DbInit() error {
         log.Print("Couldn't connect to the database", err)
         return err
     } else {
-        log.Println("Connected!")
+        log.Println("sk: MongoDb is Connected...!")
     }
 
 

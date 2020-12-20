@@ -19,5 +19,11 @@
 <br> https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
 
 <b>  build client/server </b>
+
+<b> set GOPATH environment variable
+
+<br> make generate
+
 <br> make
+
  
