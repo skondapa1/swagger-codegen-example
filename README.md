@@ -1,4 +1,6 @@
 # SWAGGER-CODEGEN example 
+Demo swagger codegen with mongo db integration and customization with mustache template
+
 # REFERENCES
    <br> https://levelup.gitconnected.com/tools-for-implementing-a-golang-api-server-with-auto-generated-code-and-documentation-694262e3866c
    <br> https://goswagger.io/tutorial/todo-list.html
@@ -19,11 +21,8 @@
 <br> https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
 
 <b>  build client/server </b>
-
 <b> set GOPATH environment variable
-
 <br> make generate
-
 <br> make
 
  
